@@ -6,6 +6,8 @@ const router = express.Router()
 
 import User from '../models/User.js'
 
+import { authMiddleware } from '../utils/auth.js'
+
 const secret = process.env.JWT_SECRET
 const expiration = '24h'
 
@@ -41,6 +43,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
+
     try {
         // find the user
         const user = await User.findOne({ email: req.body.email })
@@ -73,6 +76,14 @@ router.post('/login', async (req, res) => {
         console.log(err.message)
         res.status(400).json({ message: err.message })
     }
+})
+
+// verify our logged in user's token
+router.use(authMiddleware)
+
+// after verification send back the user details (payload)
+router.get('/', (req, res) => {
+    res.status(200).json(req.user)
 })
 
 export default router

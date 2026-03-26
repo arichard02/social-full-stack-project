@@ -1,7 +1,12 @@
 import axios from 'axios'
 
+export const token = () => localStorage.getItem('token')
+
 export const userClient = axios.create({
-     baseURL: 'http://localhost:3000/api/users'
+     baseURL: 'http://localhost:3000/api/users',
+     headers: {
+          Authorization: `Bearer ${token()}`
+     }
 })
 
 export const postClient = axios.create({
@@ -10,9 +15,6 @@ export const postClient = axios.create({
 
 // use the latest version of the token in local storage
 postClient.interceptors.request.use((req) => {
-     const token = localStorage.getItem('token')
-     if (token) {
-          req.headers.Authorization = `Bearer ${token}`
-     }
+     if (token()) req.headers.Authorization = `Bearer ${token()}`
      return req
 })

@@ -12,10 +12,10 @@ export async function authMiddleware(req, res, next) {
             return res.status(403).json({ message: "No token provided" })
         }
         
-        // remove the 'Bearer ' part of the token ('Bearer 34jnkdg834')
+        // remove the 'Bearer ' part of the token (ex: 'Bearer 34jnkdg834' -> '34jnkdg834')
         token = token.split(' ').pop().trim()
         
-        // verify the token
+        // verify the token and extract the payload
         const { data } = jwt.verify(token, secret)
 
         // pass the payload from the token to the request object

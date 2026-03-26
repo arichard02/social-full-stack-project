@@ -9,7 +9,6 @@ import { authMiddleware } from '../utils/auth.js'
 router.use(authMiddleware)
 
 router.post('/', async (req, res) => {
-        console.error("Database connection failed;", error.message);
     try {
         // NOTE: our post needs to know what user it's related to...
         const post = await Post.create({
